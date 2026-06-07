@@ -1,0 +1,54 @@
+git init
+git config user.name "Luffy-desu"
+git config user.email "rifat@v.kduniv.ac.kr"
+git add .
+git commit -m "Initial commit"
+2.  **GitHub:** Push this to a new repository on your GitHub account.<!DOCTYPE html>
+<html>
+<head>
+    <!-- Include Socket.io client library from CDN to resolve ReferenceError: io is not defined -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body style="margin:0; background:#050505; color:#00ffcc; font-family:sans-serif;">
+    <canvas id="gameCanvas" style="display:block; width:100vw; height:100vh;"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Initialize socket after library is loaded
+        const socket = io();
+
+        let roomCode = prompt("Enter 4-digit code (e.g. 1234)");
+        if (roomCode) {
+            socket.emit('joinRoom', roomCode);
+        }
+
+        socket.on('newRound', (data) => {
+            // Use data.seed to generate the same puzzle for both players
+            drawPuzzle(data.seed);
+        });
+
+        function drawPuzzle(seed) {
+            // Resize canvas to window dimensions
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            ctx.fillStyle = '#050505';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw glowing neon geometry based on seed
+            ctx.strokeStyle = '#00ffcc';
+            ctx.lineWidth = 5;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00ffcc';
+            
+            // Basic example: use seed to rotate or offset the square
+            ctx.save();
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.rotate((seed % 360) * Math.PI / 180);
+            ctx.strokeRect(-50, -50, 100, 100);
+            ctx.restore();
+        }
+    </script>
+</body>
+</html>
